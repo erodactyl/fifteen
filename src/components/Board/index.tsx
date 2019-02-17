@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { isAdjacent } from "../../utils";
 import Square from "../Square";
 import "./styles.scss";
 import useBoard from "./useBoard";
@@ -20,16 +21,21 @@ const Board = ({ showWin }: BoardProps) => {
   return (
     <div className="board">
       {
-        board.map((square) =>
-          <Square
-            key={square}
-            num={square}
-            onSelect={() => {
-              if (!disabled && square !== "NONE") {
-                select(square);
-              }
-            }}
-          />
+        board.map((square, index) => {
+          const isSelectable = !disabled && isAdjacent(board, index);
+          return (
+            <Square
+              key={square}
+              num={square}
+              onSelect={() => {
+                if (isSelectable && square !== "NONE") {
+                  select(square);
+                }
+              }}
+              selectable={isSelectable}
+            />
+          );
+        }
         )
       }
     </div>
